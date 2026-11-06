@@ -1,51 +1,117 @@
-# [RestorePhotos.io](https://restorephotos.io/)
+# AI Image Enhancer
 
-This project restores old face photos using AI. Watch the [4 minute explainer video](https://twitter.com/nutlope/status/1614794731396931585) to see how I built this or see the [15 second demo](https://twitter.com/nutlope/status/1612488923716136962).
+AI Image Enhancer is a web application that restores old, blurry, and degraded face photos using state-of-the-art machine learning (GFPGAN). Upload any photo to restore details and download high-resolution results in seconds.
 
-[![Face Photo Restorer](./public/screenshot.png)](https://restorephotos.io/)
+---
 
-## How it works
+## Preview
 
-It uses an ML model from the Applied Research Center called [GFPGAN](https://github.com/TencentARC/GFPGAN) on [Replicate](https://replicate.com/) to restore face photos. This application gives you the ability to upload any photo, which will send it through this ML Model using a Next.js API route, and return your restored photo.
+![AI Image Enhancer Screenshot](./public/screenshot.png)
 
-## Running Locally
+---
 
-### Cloning the repository the local machine.
+## Features
+
+- **AI-Powered Face Restoration:** Utilizes the TencentARC GFPGAN model hosted on Replicate to restore facial features with high clarity.
+- **Side-by-Side Comparison:** Interactive before/after image comparison slider.
+- **Instant Download:** One-click download of the enhanced image.
+- **Fast & Responsive:** Built with Next.js 13, React 18, and Tailwind CSS.
+- **Optional Rate Limiting:** Built-in rate limiting using Upstash Redis.
+
+---
+
+## How It Works
+
+1. The user uploads an image via the web interface.
+2. The image URL is submitted to the `/api/generate` API endpoint.
+3. The server triggers the **GFPGAN** ML model on **Replicate** via a prediction task.
+4. The server polls Replicate until processing is complete and returns the enhanced photo URL.
+5. The frontend displays the restored image alongside the original with interactive sliders and a download button.
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
 
 ```bash
-git clone
+git clone https://github.com/UdayDeshmukh45/AI-Image-Enhancer-main.git
+cd AI-Image-Enhancer-main
 ```
 
-### Creating a account on Replicate to get an API key.
-
-1. Go to [Replicate](https://replicate.com/) to make an account.
-2. Click on your profile picture in the top right corner, and click on "Dashboard".
-3. Click on "Account" in the navbar. And, here you can find your API token, copy it.
-
-
-### Storing API key in .env file.
-
-Create a file in root directory of project with env. And store your API key in it, as shown in the .example.env file.
-
-
-If you'd also like to do rate limiting, create an account on UpStash, create a Redis database, and populate the two environment variables in `.env` as well. If you don't want to do rate limiting, you don't need to make any changes.
-
-### Installing the dependencies.
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### Running the application.
+### 3. Configure environment variables
 
-Then, run the application in the command line and it will be available at `http://localhost:3000`.
+Create a `.env.local` file in the root directory (based on `.env.example`):
+
+```bash
+cp .env.example .env.local
+```
+
+Populate the required environment variables:
+
+```env
+# Required: Replicate API token
+# Get yours at https://replicate.com/account/api-tokens
+REPLICATE_API_KEY=your_replicate_api_key_here
+
+# Optional: Bytescale / Upload.io API key (defaults to free tier if omitted)
+NEXT_PUBLIC_UPLOAD_API_KEY=
+
+# Optional: Upstash Redis (for API rate limiting)
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+```
+
+### 4. Run the development server
 
 ```bash
 npm run dev
 ```
 
-## One-Click Deploy
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+---
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Nutlope/restorePhotos&env=REPLICATE_API_KEY&project-name=face-photo-restorer&repo-name=restore-photos)
+## Production Build
+
+To test or run the production build:
+
+```bash
+# Build the production application
+npm run build
+
+# Start the production server
+npm run start
+```
+
+---
+
+## Tech Stack
+
+- **Framework:** [Next.js](https://nextjs.org/) (React 18)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **AI Model:** [GFPGAN](https://github.com/TencentARC/GFPGAN) via [Replicate](https://replicate.com/)
+- **Uploader:** [Bytescale / Upload.io](https://www.bytescale.com/)
+- **Rate Limiting:** [Upstash Redis](https://upstash.com/)
+- **Animations:** [Framer Motion](https://www.framer.com/motion/)
+- **Deployment:** [Vercel](https://vercel.com/)
+
+---
+
+## Deploy on Vercel
+
+Deploy your own instance of this app to Vercel with one click:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/UdayDeshmukh45/AI-Image-Enhancer-main&env=REPLICATE_API_KEY&project-name=ai-image-enhancer&repo-name=ai-image-enhancer)
+
+---
+
+## License
+
+MIT License.
